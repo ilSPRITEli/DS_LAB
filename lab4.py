@@ -30,35 +30,51 @@ def is_parentheses(txt):
             if not stack.is_empty():
                 stack.pop()
             else:
+                print("Parentheses in %s are unmatched" %txt)
                 return False
     if stack.is_empty():
         return True
     else:
+        print("Parentheses in %s are unmatched" %txt)
         return False
     
 def copyStack(stack, new_stack):
-    while not stack.is_empty():
-        new_stack.push(stack.pop())
-
+    while not new_stack.is_empty():
+        new_stack.pop()
+    for i in stack.stack:
+        new_stack.push(i)
+    return new_stack
 def InfixToPostfix(txt):
     opp = {'+':1, '-':1, '*':2, '/':2}
-    wow = ArrayStack()
+    wow = ''
     opp_stack = ArrayStack()
     for i in txt:
         if (i in opp and opp_stack.is_empty()) or (i in opp and opp[i] > opp[opp_stack.stackTop()]):
             opp_stack.push(i)
         elif i in opp and opp[i] <= opp[opp_stack.stackTop()]:
             while opp[i] <= opp[opp_stack.stackTop()]:
-                wow.push(opp_stack.stackTop())
+                wow += opp_stack.stackTop()
                 opp_stack.pop()
                 if opp_stack.is_empty():
-                    opp_stack.push(i)
                     break
+            opp_stack.push(i)
         else:
-            wow.push(i)
+            wow += i
     while not opp_stack.is_empty():
-        wow.push(opp_stack.stackTop())
+        wow += opp_stack.stackTop()
         opp_stack.pop()
-    print("".join(wow.stack))
+    print('Postfix of %s is %s' %(txt, wow))
 
-InfixToPostfix("A+B*C-D/E")
+# txt = "((A-B)))*C)"
+# result = is_parentheses(txt)
+# print(result)
+
+s1 = ArrayStack(); s1.push(10); s1.push(20); s1.push(30)
+s2 = ArrayStack(); s2.push(15)
+copyStack(s1, s1)
+
+s1.printStack()
+s2.printStack()
+
+
+InfixToPostfix("A+B*C/D-F")
