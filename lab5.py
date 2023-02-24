@@ -36,47 +36,79 @@ class BST:
             prev.right = pNew
 
     def delete(self, data):
-        # Empty
         if self.is_empty():
             return None
 
-        #Start & #Prev
-        root = self.root
         prev = None
+        root = self.root
 
-        #loop จนเจอ data ที่จะ del
-        while root.val != data:
-            #วิ่งซ้าย
-            if data < root.val:
+        while root is not None:
+            if root.val == data:
+                break
+            elif root.val > data:
                 prev = root
                 root = root.left
-            #วิ่งขวา !
-            elif data > root.val:
+            else:
                 prev = root
                 root = root.right
-            #วิ่งไปแล้วไม่เจอ
-            if root == None:
-                return None
-        #กรณีไม่มีลูก
-        if root.left == None and root.right == None:
-            if prev.left.val == data:
+
+        if root is None:
+            return None
+
+        if root.left is None and root.right is None:
+            if root == self.root:
+                self.root = None
+            elif prev.left == root:
                 prev.left = None
-            elif prev.right.val == data:
+            else:
                 prev.right = None
-        #กรณีมีลูกซ้าย
-        elif root.right == None and root.left != None:
-            prev.left = root.left
-            root = None
-        #กรณีมีลูกขวา
-        elif root.right != None and root.left == None:
-            prev.right = root.right
-            root = None
-        #กรณีมีลูกขวา-ซ้าย
-        elif root.right != None and root.left != None:
-            root.val = root.left.val
-            root.left = None
-        return data
-    
+
+        elif root.left is None:
+            if root == self.root:
+                self.root = root.right
+            elif prev.left == root:
+                prev.left = root.right
+            else:
+                prev.right = root.right
+
+        elif root.right is None:
+            if root == self.root:
+                self.root = root.left
+            elif prev.left == root:
+                prev.left = root.left
+            else:
+                prev.right = root.left
+        
+        else:
+            parent = root
+            kwa = root.left
+
+            #หามากที่สุดของซับซ้าย ของรูทปัจจุบัน(ตัวที่ต้องการลบ)
+            while kwa.right is not None:
+                parent = kwa
+                kwa = kwa.right
+            
+            #ก้อปค่ามาใส่ตัวปัจจุบัน
+            root.val = kwa.val
+            
+            #
+            if parent.left == kwa:
+                parent.left = kwa.left
+            else:
+                parent.right = kwa.left
+
+
+    def findMin(self):
+        root = self.root
+        while root.left is not None:
+            root = root.left
+        return root
+    def findMax(self):
+        root =self.root
+        while root.right is not None:
+            root = root.right
+        return root
+
     def preorder(self, root):
         if (root != None):
             print("->", root.val, end=" ")
@@ -103,15 +135,10 @@ class BST:
 
 
 wow = BST()
+wow.insert(14)
+wow.insert(23)
+wow.insert(7)
 wow.insert(10)
-wow.insert(20)
-wow.insert(2)
-# wow.inorder(wow.root)
-# print()
-# wow.preorder(wow.root)
-# print()
-# wow.postorder(wow.root)
-# print()
-wow.traverse()
-wow.delete(2)
+wow.insert(33)
+wow.delete(14)
 wow.traverse()
