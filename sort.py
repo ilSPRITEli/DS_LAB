@@ -50,13 +50,12 @@ def bubbleSort(lis, last):
         if srted == False:
             wok = last
             srted = True
-            while wok > cur:
-                if pai[lis[wok]] < pai[lis[wok-1]]:
+            for i in range(wok, cur, -1):
+                if pai[lis[i]] < pai[lis[i-1]]:
                     srted = False
-                    o_w = lis[wok]
-                    lis[wok] = lis[wok-1]
-                    lis[wok-1] = o_w
-                wok -= 1
+                    o_w = lis[i]
+                    lis[i] = lis[i-1]
+                    lis[i-1] = o_w
                 comp += 1
         print(lis)
     return 'Comparison time: %d' %(comp)
